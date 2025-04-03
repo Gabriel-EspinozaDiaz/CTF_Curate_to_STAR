@@ -17,7 +17,7 @@ def file_check(cs_filename,pwd):
 
 # RUN
 
-def main(cs_pwd, target_pwd=None):
+def main(cs_pwd, symbolic_links=None, target_pwd=None):
     """
     Main function that processes the files.
     
@@ -31,7 +31,30 @@ def main(cs_pwd, target_pwd=None):
     with open(cs_pwd, 'r') as file:
         cs_raw = file.read()
 
+
+# GUIDE FOR USER
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Takes an exported cryosparc file from the CTF curation job, and writes a schedule.star file. Run the schedule.star file, and it will generate a relion job with all of the raw micrographs that you curated in CryoSPARC",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        "cs_pwd",
+        help="The pathway directory to the .cs cryosparc file, from your current directory")
     
+    parser.add_argument(
+        "symbolic_links",
+        nargs="?",
+        default=True,  
+        help="When set to True, the script will look through symbolic links for the files. This is optional argument is True by default, structural biology core convention is to produce a symbolic link within your working directory. If set to False, symbolic links will not be accessed. This speeds up the process slightly, but should only be used if your working directory is contains the raw micrograph files."
+    )
+    parser.add_argument(
+        "target_pwd",
+        nargs="?",
+        default=os.getcwd(),
+        help="If you want to run the search from somewhere else in the computer, specify the directory here. This is set to your current directory by default"
+    )
 
 
 
